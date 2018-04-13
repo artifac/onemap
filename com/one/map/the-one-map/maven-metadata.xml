@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>com.one.map</groupId>
-  <artifactId>onemap</artifactId>
+  <artifactId>the-one-map</artifactId>
   <versioning>
-    <release>1.0.3</release>
+    <release>1.0.4</release>
     <versions>
-      <version>1.0.3</version>
+      <version>1.0.4</version>
     </versions>
-    <lastUpdated>20180413024952</lastUpdated>
+    <lastUpdated>20180413025932</lastUpdated>
   </versioning>
 </metadata>
