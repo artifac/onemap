@@ -19,7 +19,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url "https://jitpack.io" }
     }
 }
 
@@ -50,6 +49,10 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation files('libs/TencentLocationSdk_v6.2.5.3.jar')
     implementation files('libs/TencentMapSearch_v1.1.7.jar')
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
 
 apply plugin: 'maven'
@@ -57,7 +60,7 @@ apply plugin: 'maven'
 ext {
     PUBLISH_GROUP_ID = 'the-one-map'
     PUBLISH_ARTIFACT_ID = 'com.one.map'
-    PUBLISH_VERSION = '1.0.1'
+    PUBLISH_VERSION = '1.0.2'
 }
 
 uploadArchives {
