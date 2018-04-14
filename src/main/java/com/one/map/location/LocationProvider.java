@@ -10,14 +10,12 @@ import com.one.map.view.IMapView;
 import com.one.map.view.IMapView.MapType;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-/**
- * Created by mobike on 2017/11/28.
- */
 @Keep
 public class LocationProvider implements ILocReceive {
 
   private ILocation locationService;
   private static LocationProvider instance;
+  private final CopyOnWriteArraySet<OnLocationChangedListener> mListeners = new CopyOnWriteArraySet<>();
   /**
    * 缓存的定位
    */
@@ -48,9 +46,6 @@ public class LocationProvider implements ILocReceive {
     return -1;
   }
 
-
-  private final CopyOnWriteArraySet<OnLocationChangedListener> mListeners = new CopyOnWriteArraySet<>();
-
   public void addLocationChangeListener(OnLocationChangedListener listener) {
     mListeners.add(listener);
   }
@@ -60,7 +55,10 @@ public class LocationProvider implements ILocReceive {
   }
 
   public Address getLocation() {
-    return locationService.getCurrentLocation();
+    if (locationService != null) {
+      return locationService.getCurrentLocation();
+    }
+    return null;
   }
 
   public void stop() {
