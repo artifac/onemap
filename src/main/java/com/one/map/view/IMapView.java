@@ -17,10 +17,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 
 /**
  * 地图的接口Map
- * Created by mobike on 2017/11/26.
+ * Created by ludexiang on 2017/11/26.
  */
 public interface IMapView extends IMapLifeCycle {
   
@@ -68,6 +69,8 @@ public interface IMapView extends IMapLifeCycle {
   void clearElements();
   
   Marker addMarker(MarkerOption option);
+
+  List<Marker> addMarkers(List<MarkerOption> options);
   
   Polyline addPolyline(PolylineOption option);
   

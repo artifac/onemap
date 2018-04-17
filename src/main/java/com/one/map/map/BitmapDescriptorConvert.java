@@ -1,10 +1,5 @@
 package com.one.map.map;
 
-
-/**
- * Created by mobike on 2017/11/29.
- */
-
 public class BitmapDescriptorConvert {
 
   public static com.tencent.tencentmap.mapsdk.maps.model.BitmapDescriptor

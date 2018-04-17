@@ -13,7 +13,7 @@ import com.tencent.map.geolocation.TencentLocationManager;
 import com.tencent.map.geolocation.TencentLocationRequest;
 
 /**
- * Created by mobike on 2017/11/27.
+ * Created by ludexiang on 2017/11/27.
  */
 @Keep
 public class TencentMapLocation implements ILocation, TencentLocationListener {
@@ -34,7 +34,6 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
     locationRequest = TencentLocationRequest.create();
     locationRequest.setAllowGPS(true);
     locationRequest.setAllowDirection(true);
-
   }
 
   @Override
@@ -72,7 +71,7 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
     if (TencentLocation.ERROR_OK == errNo) {
       // 定位成功
       // 位置更新时的回调
-      location = getMochaLocation(tencentLocation);
+      location = getLocation(tencentLocation);
       currentLocation = buildAddress(location);
       if (mLocReceive != null) {
         mLocReceive.onLocReceive(currentLocation);
@@ -86,28 +85,27 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
 
   }
 
-  private Address buildAddress(Location mochaLocation) {
-    if (mochaLocation == null) {
+  private Address buildAddress(Location location) {
+    if (location == null) {
       return null;
     }
-    Address location = new Address();
-    location.mCity = mochaLocation.city;
-    location.bearing = mochaLocation.bearing;
-    location.speed = mochaLocation.speed;
-    location.mCityCode = mochaLocation.cityCode;
-    location.mCountry = mochaLocation.country;
-    location.mStreetCode = mochaLocation.streetCode;
-    location.mStreet = mochaLocation.street;
-    location.mAdrLatLng = new LatLng(mochaLocation.latitude,
-        mochaLocation.longitude);
-    location.mAdrFullName = mochaLocation.adrFullName;
-    location.mAdrDisplayName = mochaLocation.adrDisplayName;
-    location.accuracy = mochaLocation.accuracy;
-    return location;
+    Address locAdr = new Address();
+    locAdr.mCity = location.city;
+    locAdr.bearing = location.bearing;
+    locAdr.speed = location.speed;
+    locAdr.mCityCode = location.cityCode;
+    locAdr.mCountry = location.country;
+    locAdr.mStreetCode = location.streetCode;
+    locAdr.mStreet = location.street;
+    locAdr.mAdrLatLng = new LatLng(location.latitude, location.longitude);
+    locAdr.mAdrFullName = location.adrFullName;
+    locAdr.mAdrDisplayName = location.adrDisplayName;
+    locAdr.accuracy = location.accuracy;
+    return locAdr;
   }
 
 
-  private Location getMochaLocation(TencentLocation tencentLocation) {
+  private Location getLocation(TencentLocation tencentLocation) {
     if (tencentLocation == null) {
       return null;
     }

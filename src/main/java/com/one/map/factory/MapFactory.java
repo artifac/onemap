@@ -10,7 +10,7 @@ import com.one.map.view.IMapView.MapType;
 import com.one.map.view.impl.MapView;
 
 /**
- * Created by mobike on 2017/11/27.
+ * Created by ludexiang on 2017/11/27.
  */
 
 public class MapFactory {

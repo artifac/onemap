@@ -5,10 +5,6 @@ import com.one.map.map.element.ICircle;
 import com.one.map.model.LatLng;
 import com.tencent.tencentmap.mapsdk.maps.model.Circle;
 
-/**
- * Created by mobike on 2017/12/4.
- */
-
 public class TencentCircle implements ICircle {
   private Circle circle;
   

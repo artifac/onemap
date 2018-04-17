@@ -11,21 +11,22 @@ import com.tencent.tencentmap.mapsdk.maps.model.Marker;
 import java.util.ArrayList;
 
 /**
- * Created by mobike on 2017/11/29.
+ * Created by ludexiang on 2017/11/29.
  */
 
 public class TencentMarker implements IMarker<BitmapDescriptor, Marker> {
   
-  private Marker mTencentMarker;
+  private Marker tencentMarker;
   private boolean isClickable;
+  private @MarkerType int markerType;
   
   public TencentMarker(Marker marker) {
-    mTencentMarker = marker;
+    tencentMarker = marker;
   }
   
   @Override
   public void setPosition(LatLng location) {
-    mTencentMarker.setPosition(LatLngConvert.convert2TencentLatLng(location));
+    tencentMarker.setPosition(LatLngConvert.convert2TencentLatLng(location));
   }
   
   @Override
@@ -40,12 +41,12 @@ public class TencentMarker implements IMarker<BitmapDescriptor, Marker> {
   
   @Override
   public void remove() {
-    mTencentMarker.remove();
+    tencentMarker.remove();
   }
   
   @Override
   public Marker getSourceMarker() {
-    return mTencentMarker;
+    return tencentMarker;
   }
   
   @Override
@@ -55,7 +56,7 @@ public class TencentMarker implements IMarker<BitmapDescriptor, Marker> {
   
   @Override
   public Marker getMarkerInstance() {
-    return mTencentMarker;
+    return tencentMarker;
   }
   
   @Override
@@ -75,17 +76,17 @@ public class TencentMarker implements IMarker<BitmapDescriptor, Marker> {
   
   @Override
   public void setTitle(String title) {
-    mTencentMarker.setTitle(title);
+    tencentMarker.setTitle(title);
   }
   
   @Override
   public String getTitle() {
-    return mTencentMarker.getTitle();
+    return tencentMarker.getTitle();
   }
   
   @Override
   public void setIcon(BitmapDescriptor icon) {
-    mTencentMarker.setIcon(BitmapDescriptorConvert.convert2TencentBitmapDescriptor(icon));
+    tencentMarker.setIcon(BitmapDescriptorConvert.convert2TencentBitmapDescriptor(icon));
   }
   
   @Override
@@ -111,7 +112,17 @@ public class TencentMarker implements IMarker<BitmapDescriptor, Marker> {
   public void setAnimation(Animation animation) {
   
   }
-  
+
+  @Override
+  public @MarkerType int getMarkerType() {
+    return markerType;
+  }
+
+  @Override
+  public void setMarkerType(@MarkerType int type) {
+    markerType = type;
+  }
+
   @Override
   public void setClick(boolean clickable) {
     isClickable = clickable;
@@ -124,8 +135,8 @@ public class TencentMarker implements IMarker<BitmapDescriptor, Marker> {
 
   @Override
   public void rotate(float angle) {
-    if (mTencentMarker != null) {
-      mTencentMarker.setRotation(angle);
+    if (tencentMarker != null) {
+      tencentMarker.setRotation(angle);
     }
   }
 }

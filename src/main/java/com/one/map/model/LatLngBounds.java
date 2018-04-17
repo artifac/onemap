@@ -3,10 +3,6 @@ package com.one.map.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by mobike on 2017/11/22.
- */
-
 public final class LatLngBounds implements Parcelable {
   public final LatLng northeast;
   public final LatLng southwest;

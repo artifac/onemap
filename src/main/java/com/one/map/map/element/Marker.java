@@ -3,12 +3,9 @@ package com.one.map.map.element;
 import android.os.Bundle;
 import com.one.map.anim.Animation;
 import com.one.map.map.BitmapDescriptor;
+import com.one.map.map.element.IMarker.MarkerType;
 import com.one.map.model.LatLng;
 import java.util.ArrayList;
-
-/**
- * Created by mobike on 2017/11/29.
- */
 
 public class Marker {
   
@@ -77,6 +74,11 @@ public class Marker {
   
   public void setIcons(ArrayList icons) {
     
+  }
+
+  @MarkerType
+  public int getMarkerType() {
+    return iMarker.getMarkerType();
   }
   
   public ArrayList getIcons() {

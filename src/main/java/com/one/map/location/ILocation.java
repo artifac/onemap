@@ -5,7 +5,7 @@ import android.support.annotation.Keep;
 import com.one.map.model.Address;
 
 /**
- * Created by mobike on 2017/11/17.
+ * Created by ludexiang on 2017/11/17.
  */
 @Keep
 public interface ILocation {

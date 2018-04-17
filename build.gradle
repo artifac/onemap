@@ -6,6 +6,9 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://oss.sonatype.org/content/groups/public"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0'
@@ -19,12 +22,14 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://oss.sonatype.org/content/groups/public"
+        }
     }
 }
 
 android {
     compileSdkVersion 26
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 26
@@ -41,18 +46,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs "libs"
+            jni.srcDirs = []
+        }
+    }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.tencent.map:tencent-map-vector-sdk:4.0.3.2'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation files('libs/TencentLocationSdk_v6.2.5.3.jar')
-    implementation files('libs/TencentMapSearch_v1.1.7.jar')
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    //    implementation files('libs/TencentMapSDK_Raster.jar')
+    implementation files('libs/TencentMapSearch.jar')
 }
 
 apply plugin: 'maven'

@@ -12,9 +12,10 @@ import com.one.map.map.element.Polyline;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
 import com.one.map.model.MapStatusOperation;
+import java.util.List;
 
 /**
- * Created by mobike on 2017/11/27.
+ * Created by ludexiang on 2017/11/27.
  */
 
 public interface IMapDelegate<MAP> {
@@ -43,6 +44,12 @@ public interface IMapDelegate<MAP> {
    * 添加Marker
    */
   Marker addMarker(MarkerOption option);
+
+  /**
+   * 添加一系列marker
+   * @return
+   */
+  List<Marker> addMarkers(List<MarkerOption> options);
   
   
   IMarker myLocationConfig(BitmapDescriptor bitmapDescriptor, LatLng position);

@@ -1,7 +1,6 @@
 package com.one.map.map.element;
 
 /**
- * Created by mobike on 2017/11/30.
  * M --> IMapView
  */
 

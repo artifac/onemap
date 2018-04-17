@@ -4,7 +4,7 @@ package com.one.map.map;
 import com.one.map.model.LatLng;
 
 /**
- * Created by mobike on 2017/11/29.
+ * Created by ludexiang on 2017/11/29.
  */
 
 public class LatLngConvert {

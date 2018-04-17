@@ -3,7 +3,7 @@ package com.one.map.map.element;
 import com.one.map.model.LatLng;
 
 /**
- * Created by mobike on 2017/11/28.
+ * Created by ludexiang on 2017/11/28.
  * V --> 地图上元素
  */
 

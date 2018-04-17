@@ -14,18 +14,30 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class LocationProvider implements ILocReceive {
 
   private ILocation locationService;
-  private static LocationProvider instance;
   private final CopyOnWriteArraySet<OnLocationChangedListener> mListeners = new CopyOnWriteArraySet<>();
   /**
    * 缓存的定位
    */
   private Address currentAddress;
 
-  public static synchronized LocationProvider getInstance() {
-    if (instance == null) {
-      instance = new LocationProvider();
+  private LocationProvider() {
+
+  }
+
+  public static final class LocationFactory {
+    private static LocationProvider instance;
+    public static LocationProvider getInstance() {
+      synchronized (LocationProvider.class) {
+        if (instance == null) {
+          instance = new LocationProvider();
+        }
+        return instance;
+      }
     }
-    return instance;
+  }
+
+  public static synchronized LocationProvider getInstance() {
+    return LocationFactory.getInstance();
   }
 
   public void buildLocation(Context context, @MapType int type) {

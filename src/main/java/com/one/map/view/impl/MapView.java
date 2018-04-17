@@ -16,14 +16,12 @@ import com.one.map.model.MapStatusOperation;
 import com.one.map.tencent.TencentMapDelegate;
 import com.one.map.view.IMapDelegate;
 import com.one.map.view.IMapView;
-
-/**
- * Created by mobike on 2017/11/30.
- */
+import java.util.List;
 
 public class MapView implements IMapView {
+
   private IMapDelegate mMapDelegate;
-  
+
   /**
    * @param context getApplicationContext()
    */
@@ -32,52 +30,57 @@ public class MapView implements IMapView {
       mMapDelegate = new TencentMapDelegate(context);
     }
   }
-  
+
   @Override
   public void attachToRootView(ViewGroup viewGroup) {
     viewGroup.addView(mMapDelegate.getView());
   }
-  
+
   @Override
   public void setPadding(MapStatusOperation.Padding padding) {
     mMapDelegate.setPadding(padding);
   }
-  
+
   @Override
   public void setTraffic(boolean isShowTraffic) {
     mMapDelegate.setTraffic(isShowTraffic);
   }
-  
+
   @Override
   public void setUIController(boolean isShowUIController) {
     mMapDelegate.setUIController(isShowUIController);
   }
-  
+
   @Override
   public IMarker myLocationConfig(BitmapDescriptor bitmapDescriptor, LatLng latLng) {
     return mMapDelegate.myLocationConfig(bitmapDescriptor, latLng);
   }
-  
+
   @Override
   public void setMyLocationEnable(boolean enable) {
     mMapDelegate.setMyLocationEnable(enable);
   }
-  
+
   @Override
   public void doBestView(BestViewModel model) {
     mMapDelegate.doBestView(model);
   }
-  
+
   @Override
   public Marker addMarker(MarkerOption option) {
     return mMapDelegate.addMarker(option);
   }
-  
+
+  @Override
+  public List<Marker> addMarkers(List<MarkerOption> options) {
+    return mMapDelegate.addMarkers(options);
+  }
+
   @Override
   public boolean showInfoWindow(IMarker marker, CharSequence msg) {
     return mMapDelegate.showInfoWindow(marker, msg);
   }
-  
+
   @Override
   public void updateInfoWindowMsg(CharSequence msg) {
     mMapDelegate.updateInfoWindowMsg(msg);
@@ -95,42 +98,42 @@ public class MapView implements IMapView {
   public Polyline addPolyline(PolylineOption option) {
     return mMapDelegate.addPolyline(option);
   }
-  
+
   @Override
   public Circle addCircle(CircleOption option) {
     return mMapDelegate.addCircle(option);
   }
-  
+
   @Override
   public void clearElements() {
     mMapDelegate.clearElements();
   }
-  
+
   @Override
   public void onRestart() {
     mMapDelegate.onRestart();
   }
-  
+
   @Override
   public void onStart() {
     mMapDelegate.onStart();
   }
-  
+
   @Override
   public void onResume() {
     mMapDelegate.onResume();
   }
-  
+
   @Override
   public void onPause() {
     mMapDelegate.onPause();
   }
-  
+
   @Override
   public void onStop() {
     mMapDelegate.onStop();
   }
-  
+
   @Override
   public void onDestroy() {
     mMapDelegate.onDestroy();

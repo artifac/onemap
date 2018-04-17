@@ -5,34 +5,34 @@ package com.one.map.anim;
  */
 public class Animation {
 
-    public enum MarkerAnimation {
-        /**
-         * 没效果
-         */
-        none,
-        /**
-         * 从天上掉下
-         */
-        drop,
+  public enum MarkerAnimation {
+    /**
+     * 没效果
+     */
+    none,
+    /**
+     * 从天上掉下
+     */
+    drop,
 
-        /**
-         * 从地面生长
-         */
-        grow,
+    /**
+     * 从地面生长
+     */
+    grow,
 
-        /**
-         * 跳动
-         */
-        jump
-    }
+    /**
+     * 跳动
+     */
+    jump
+  }
 
-    public Animation(MarkerAnimation markerAnimation) {
-        this.markerAnimation = markerAnimation;
-    }
+  public Animation(MarkerAnimation markerAnimation) {
+    this.markerAnimation = markerAnimation;
+  }
 
-    public MarkerAnimation getMarkerAnimation() {
-        return markerAnimation;
-    }
+  public MarkerAnimation getMarkerAnimation() {
+    return markerAnimation;
+  }
 
-    private MarkerAnimation markerAnimation;
+  private MarkerAnimation markerAnimation;
 }

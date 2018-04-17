@@ -2,10 +2,6 @@ package com.one.map.location;
 
 import java.util.HashMap;
 
-/**
- * Created by mobike on 2017/12/5.
- */
-
 public class CityCodeConverter {
 
   private static HashMap<String, String> cityCodeTransform = new HashMap<>();

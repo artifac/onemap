@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mobike on 2017/11/27.
+ * Created by ludexiang on 2017/11/27.
  */
 
 public class TencentMapPoi implements IMapPoi {

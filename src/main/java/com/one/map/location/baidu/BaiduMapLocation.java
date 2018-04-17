@@ -1,10 +1,6 @@
 package com.one.map.location.baidu;
 
-/**
- * Created by mobike on 2017/11/27.
- */
-
-public class BaiduLocation {
+public class BaiduMapLocation {
   //  private Context mContext;
 //  private LocationClient mLocationClient;
 //  private LocationListener mLocationListener;

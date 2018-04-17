@@ -1,9 +1,5 @@
 package com.one.map.model;
 
-/**
- * Created by mobike on 2017/11/17.
- */
-
 public class Address {
   
   /**

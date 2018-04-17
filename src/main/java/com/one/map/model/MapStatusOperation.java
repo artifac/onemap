@@ -2,10 +2,6 @@ package com.one.map.model;
 
 import com.one.map.util.WindowUtil;
 
-/**
- * Created by mobike on 2017/11/28.
- */
-
 public class MapStatusOperation {
   /** 默认的地图padding */
   private static final float ZOOM_PADDING_DEFAULT = 80;

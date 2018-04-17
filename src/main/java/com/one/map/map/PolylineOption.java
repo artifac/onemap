@@ -3,10 +3,6 @@ package com.one.map.map;
 import com.one.map.model.LatLng;
 import java.util.List;
 
-/**
- * Created by mobike on 2017/11/30.
- */
-
 public class PolylineOption {
   /**
    * 折线宽度

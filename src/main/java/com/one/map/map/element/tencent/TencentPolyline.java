@@ -6,10 +6,6 @@ import com.tencent.tencentmap.mapsdk.maps.model.Polyline;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mobike on 2017/11/30.
- */
-
 public class TencentPolyline implements IPolyline<Polyline> {
   private Polyline mTencentPolyline;
   

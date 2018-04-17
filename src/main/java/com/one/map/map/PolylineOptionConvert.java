@@ -5,10 +5,6 @@ import com.one.map.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mobike on 2017/11/30.
- */
-
 public class PolylineOptionConvert {
   public static com.tencent.tencentmap.mapsdk.maps.model.PolylineOptions convert2TencentPolylineOption(PolylineOption option) {
     com.tencent.tencentmap.mapsdk.maps.model.PolylineOptions options = new com.tencent.tencentmap.mapsdk.maps.model.PolylineOptions();

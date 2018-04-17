@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by mobike on 2017/11/22.
+ * Created by ludexiang on 2017/11/22.
  */
 
 public final class LatLng implements Parcelable {

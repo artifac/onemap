@@ -3,7 +3,7 @@ package com.one.map.poi;
 import com.one.map.model.Address;
 
 /**
- * Created by mobike on 2017/11/27.
+ * Created by ludexiang on 2017/11/27.
  */
 
 public interface IMapPoi {

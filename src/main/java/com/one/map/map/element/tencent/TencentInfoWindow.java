@@ -11,10 +11,6 @@ import com.one.map.model.LatLng;
 import com.tencent.tencentmap.mapsdk.maps.TencentMap;
 import com.tencent.tencentmap.mapsdk.maps.model.Marker;
 
-/**
- * Created by mobike on 2017/11/30.
- */
-
 public class TencentInfoWindow<MAP, MARKER extends IMarker> implements IInfoWindow {
   private Context mContext;
   private TencentMarker mMarker;

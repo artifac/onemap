@@ -4,10 +4,6 @@ import com.one.map.model.MapStatusOperation.Padding;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mobike on 2017/11/22.
- */
-
 public class BestViewModel {
   /**
    * 表单高度变化或出现banner
