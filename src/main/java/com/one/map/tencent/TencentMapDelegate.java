@@ -121,6 +121,12 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
   }
 
   @Override
+  public void setLogoPosition(int position, int left, int top, int right, int bottom) {
+    UiSettings settings = mTencentMap.getUiSettings();
+    settings.setLogoPositionWithMargin(position, top, bottom, left, right);
+  }
+
+  @Override
   public com.one.map.map.element.Marker addMarker(MarkerOption option) {
     final MarkerOptions options = MarkerOptionConvert.convert2TencentMarkerOption(option);
     Marker marker = mTencentMap.addMarker(options);
@@ -214,6 +220,7 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
 
   private void moveTo(BestViewModel model) {
     CameraUpdate cameraUpdate;
+    Padding padding = MapStatusOperation.instance().getDeltaPadding();
     if (model.zoomCenter != null) {
       /** 以center为中心点,同时确保所有点都在地图可视区域*/
       LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -245,9 +252,10 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
       com.tencent.tencentmap.mapsdk.maps.model.LatLng northeast = new com.tencent.tencentmap.mapsdk.maps.model.LatLng(
           northeastLat, northeastLng);
       LatLngBounds symmetryBounds = new LatLngBounds(southwest, northeast);
+
       cameraUpdate = CameraUpdateFactory
-          .newLatLngBoundsRect(symmetryBounds, model.padding.left, model.padding.right,
-              model.padding.top, model.padding.bottom);
+          .newLatLngBoundsRect(symmetryBounds, model.padding.left + padding.left, model.padding.right + padding.right,
+              model.padding.top + padding.top, model.padding.bottom + padding.bottom);
     } else {
       /** 以一组点几何中心为中心点, 同时确保所有点都在地图可视区域*/
       LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -258,8 +266,8 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
       }
       LatLngBounds bounds = builder.build();
       cameraUpdate = CameraUpdateFactory
-          .newLatLngBoundsRect(bounds, model.padding.left, model.padding.right, model.padding.top,
-              model.padding.bottom);
+          .newLatLngBoundsRect(bounds, model.padding.left + padding.left, model.padding.right + padding.right,
+              model.padding.top + padding.top, model.padding.bottom + padding.bottom);
     }
     mTencentMap.animateCamera(cameraUpdate);
   }

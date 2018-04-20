@@ -4,7 +4,7 @@ import com.one.map.util.WindowUtil;
 
 public class MapStatusOperation {
   /** 默认的地图padding */
-  private static final float ZOOM_PADDING_DEFAULT = 80;
+  private static final float ZOOM_PADDING_DEFAULT = 60;
   private Padding deltaPadding;
   
   private MapStatusOperation() {

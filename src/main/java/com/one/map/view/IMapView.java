@@ -60,6 +60,8 @@ public interface IMapView extends IMapLifeCycle {
    * 显示定位
    */
   void setMyLocationEnable(boolean enable);
+
+  void setLogoPosition(int position, int left, int top, int right, int bottom);
   
   /**
    * 是否展示 + - 控制

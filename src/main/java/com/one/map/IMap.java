@@ -62,6 +62,11 @@ public interface IMap {
   Polyline addPolyline(PolylineOption option);
 
   /**
+   * logo 位置
+   */
+  void setLogoPosition(int position, int left, int top, int right, int bottom);
+
+  /**
    * 路径规划返回的消息
    * @return
    */

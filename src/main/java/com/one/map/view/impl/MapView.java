@@ -52,6 +52,11 @@ public class MapView implements IMapView {
   }
 
   @Override
+  public void setLogoPosition(int position, int left, int top, int right, int bottom) {
+    mMapDelegate.setLogoPosition(position, left, top, right, bottom);
+  }
+
+  @Override
   public IMarker myLocationConfig(BitmapDescriptor bitmapDescriptor, LatLng latLng) {
     return mMapDelegate.myLocationConfig(bitmapDescriptor, latLng);
   }

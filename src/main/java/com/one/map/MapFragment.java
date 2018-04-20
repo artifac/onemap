@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,10 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     mMapViewContainer = (FrameLayout) view.findViewById(R.id.map_view_container);
     mLocPin = (ImageView) view.findViewById(R.id.map_fragment_loc_pin);
     mMapView.attachToRootView(mMapViewContainer);
+    int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getActivity().getResources().getDisplayMetrics());
+    setLogoPosition(85, margin, margin, margin, margin);
 //    mMapPresenter = new MapPresenter(getContext(), this, mMapPoi);
-    displayMyLocation();
+//    displayMyLocation();
     return view;
   }
 
@@ -96,6 +99,11 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     if (mMarkerListener != null) {
       mMarkerListener.onMarkerClick(marker);
     }
+  }
+
+  @Override
+  public void setLogoPosition(int position, int left, int top, int right, int bottom) {
+    mMapView.setLogoPosition(position, left, top, right, bottom);
   }
 
   @Override

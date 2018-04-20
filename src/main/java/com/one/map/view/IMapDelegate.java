@@ -58,7 +58,12 @@ public interface IMapDelegate<MAP> {
    * 是否展示定位
    */
   void setMyLocationEnable(boolean enable);
-  
+
+  /**
+   * 设置logo 位置
+   */
+  void setLogoPosition(int position, int left, int top, int right, int bottom);
+
   /**
    * 绘制路线
    * @param
