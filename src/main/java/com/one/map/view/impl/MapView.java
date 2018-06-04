@@ -1,7 +1,9 @@
 package com.one.map.view.impl;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.ViewGroup;
+import com.one.map.amap.AMapDelegate;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.CircleOption;
 import com.one.map.map.MarkerOption;
@@ -10,11 +12,13 @@ import com.one.map.map.element.Circle;
 import com.one.map.map.element.IMarker;
 import com.one.map.map.element.Marker;
 import com.one.map.map.element.Polyline;
+import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
 import com.one.map.model.MapStatusOperation;
 import com.one.map.tencent.TencentMapDelegate;
 import com.one.map.view.IMapDelegate;
+import com.one.map.view.IMapDelegate.IMapListener;
 import com.one.map.view.IMapView;
 import java.util.List;
 
@@ -28,6 +32,8 @@ public class MapView implements IMapView {
   public MapView(Context context, @MapType int type) {
     if (type == TENCENT) {
       mMapDelegate = new TencentMapDelegate(context);
+    } else if (type == AMAP) {
+      mMapDelegate = new AMapDelegate(context);
     }
   }
 
@@ -49,6 +55,21 @@ public class MapView implements IMapView {
   @Override
   public void setUIController(boolean isShowUIController) {
     mMapDelegate.setUIController(isShowUIController);
+  }
+
+  @Override
+  public void geo2Address(LatLng latLng) {
+     mMapDelegate.geo2Address(latLng);
+  }
+
+  @Override
+  public LatLng getCenterPosition() {
+    return mMapDelegate.getCenterPosition();
+  }
+
+  @Override
+  public void setMapListener(IMapListener listener) {
+    mMapDelegate.setMapListener(listener);
   }
 
   @Override
@@ -112,6 +133,11 @@ public class MapView implements IMapView {
   @Override
   public void clearElements() {
     mMapDelegate.clearElements();
+  }
+
+  @Override
+  public void onCreate(Bundle bundle) {
+    mMapDelegate.onCreate(bundle);
   }
 
   @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Keep;
 import com.one.map.location.ILocation.ILocReceive;
 import com.one.map.location.tencent.TencentMapLocation;
+import com.one.map.log.Logger;
 import com.one.map.model.Address;
 import com.one.map.view.IMapView;
 import com.one.map.view.IMapView.MapType;
@@ -81,6 +82,7 @@ public class LocationProvider implements ILocReceive {
 
   @Override
   public void onLocReceive(Address adr) {
+    Logger.e("ldx", "onLocReceiver >> adr " + adr);
     try {
       for (OnLocationChangedListener listener : mListeners) {
         if (listener != null) {

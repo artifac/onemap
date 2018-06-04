@@ -10,9 +10,11 @@ import com.one.map.map.element.Circle;
 import com.one.map.map.element.IMarker;
 import com.one.map.map.element.Marker;
 import com.one.map.map.element.Polyline;
+import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
 import com.one.map.model.MapStatusOperation;
+import com.one.map.view.IMapDelegate.IMapListener;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -52,6 +54,8 @@ public interface IMapView extends IMapLifeCycle {
    * @param isShowTraffic
    */
   void setTraffic(boolean isShowTraffic);
+
+  void setMapListener(IMapListener listener);
   
   
   IMarker myLocationConfig(BitmapDescriptor bitmapDescriptor, LatLng latLng);
@@ -87,12 +91,18 @@ public interface IMapView extends IMapLifeCycle {
   void updateInfoWindowMsg(CharSequence msg);
 
   void removeInfoWindow();
+
+  void geo2Address(LatLng latLng);
   
   /**
    * 刷新最佳view
    * @param model
    */
   void doBestView(BestViewModel model);
-  
-  
+
+  /**
+   * 获取中心店位置坐标
+   * @return
+   */
+  LatLng getCenterPosition();
 }

@@ -1,5 +1,6 @@
 package com.one.map.view;
 
+import android.os.Bundle;
 import android.support.annotation.Keep;
 
 /**
@@ -8,6 +9,8 @@ import android.support.annotation.Keep;
 
 @Keep
 public interface IMapLifeCycle {
+
+  void onCreate(Bundle bundle);
   
   void onRestart();
   

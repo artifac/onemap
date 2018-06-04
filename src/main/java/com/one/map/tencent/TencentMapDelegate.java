@@ -2,6 +2,8 @@ package com.one.map.tencent;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.BitmapDescriptorConvert;
 import com.one.map.map.CircleOption;
@@ -18,19 +20,29 @@ import com.one.map.map.element.tencent.TencentCircle;
 import com.one.map.map.element.tencent.TencentInfoWindow;
 import com.one.map.map.element.tencent.TencentMarker;
 import com.one.map.map.element.tencent.TencentPolyline;
+import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
 import com.one.map.model.MapStatusOperation;
 import com.one.map.model.MapStatusOperation.Padding;
 import com.one.map.util.MapUtils;
 import com.one.map.view.IMapDelegate;
+import com.tencent.lbssearch.TencentSearch;
+import com.tencent.lbssearch.httpresponse.BaseObject;
+import com.tencent.lbssearch.httpresponse.HttpResponseListener;
+import com.tencent.lbssearch.object.Location;
+import com.tencent.lbssearch.object.param.Geo2AddressParam;
+import com.tencent.lbssearch.object.result.Geo2AddressResultObject;
+import com.tencent.lbssearch.object.result.Geo2AddressResultObject.ReverseAddressResult.Poi;
 import com.tencent.tencentmap.mapsdk.maps.CameraUpdate;
 import com.tencent.tencentmap.mapsdk.maps.CameraUpdateFactory;
 import com.tencent.tencentmap.mapsdk.maps.LocationSource;
 import com.tencent.tencentmap.mapsdk.maps.MapView;
 import com.tencent.tencentmap.mapsdk.maps.SupportMapFragment;
 import com.tencent.tencentmap.mapsdk.maps.TencentMap;
+import com.tencent.tencentmap.mapsdk.maps.TencentMap.OnCameraChangeListener;
 import com.tencent.tencentmap.mapsdk.maps.UiSettings;
+import com.tencent.tencentmap.mapsdk.maps.model.CameraPosition;
 import com.tencent.tencentmap.mapsdk.maps.model.Circle;
 import com.tencent.tencentmap.mapsdk.maps.model.CircleOptions;
 import com.tencent.tencentmap.mapsdk.maps.model.LatLngBounds;
@@ -39,6 +51,8 @@ import com.tencent.tencentmap.mapsdk.maps.model.MarkerOptions;
 import com.tencent.tencentmap.mapsdk.maps.model.Polyline;
 import com.tencent.tencentmap.mapsdk.maps.model.PolylineOptions;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -55,6 +69,9 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
   private IPolyline mTencentPolyline;
   private SupportMapFragment mMapFragment;
   private Marker mMyMarker;
+  private IMapListener mMapListener;
+
+  private CenterLatLngParams mCenterLatLngParams = new CenterLatLngParams();
 
   public TencentMapDelegate(Context context) {
     mContext = context;
@@ -76,6 +93,73 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
     mTencentMap.getUiSettings().setScaleViewEnabled(false);
     mTencentMap.getUiSettings().setZoomControlsEnabled(false);
     mTencentMap.getUiSettings().setMyLocationButtonEnabled(false);
+    mTencentMap.setOnCameraChangeListener(new OnCameraChangeListener() {
+      @Override
+      public void onCameraChange(CameraPosition cameraPosition) {
+        mMapListener.onMapMoveChange();
+      }
+
+      @Override
+      public void onCameraChangeFinished(CameraPosition cameraPosition) {
+        Log.e("ldx", "onCameraChangeFinish >>>>>>>");
+        mCenterLatLngParams.center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+        mMapListener.onMapMoveFinish(mCenterLatLngParams);
+      }
+    });
+  }
+
+
+  @Override
+  public void setMapListener(IMapListener listener) {
+    mMapListener = listener;
+  }
+
+  @Override
+  public LatLng getCenterPosition() {
+    return mCenterLatLngParams.center;
+  }
+
+  @Override
+  public void geo2Address(final LatLng ll) {
+    com.tencent.tencentmap.mapsdk.maps.model.LatLng latLng = LatLngConvert.convert2TencentLatLng(ll);
+    Geo2AddressParam geo2AddressParam = new Geo2AddressParam().location(new Location((float) latLng.latitude, (float) latLng.longitude)).get_poi(true);
+    TencentSearch search = new TencentSearch(mContext);
+    search.geo2address(geo2AddressParam, new HttpResponseListener() {
+      @Override
+      public void onSuccess(int i, BaseObject baseObject) {
+        Geo2AddressResultObject result = (Geo2AddressResultObject) baseObject;
+        mCenterLatLngParams.center = ll;
+        mCenterLatLngParams.detailAddress = result.result.address;
+        Address centerAdr = new Address();
+        centerAdr.mCity = result.result.address_component.city;
+        centerAdr.mCountry = result.result.address_component.nation;
+        centerAdr.mStreet = result.result.address_component.street;
+        centerAdr.mStreetCode = result.result.address_component.street_number;
+        centerAdr.mAdrFullName = result.result.address;
+        centerAdr.mAdrLatLng = ll;
+        List<Geo2AddressResultObject.ReverseAddressResult.Poi> pois = result.result.pois;
+        Collections.sort(pois, new Comparator<Poi>() {
+          @Override
+          public int compare(Poi o1, Poi o2) {
+            if (o1._distance > o2._distance) {
+              return 1;
+            } else if (o1._distance < o2._distance) {
+              return -1;
+            }
+            return 0;
+          }
+        });
+        if (pois != null && pois.size() > 0) {
+          centerAdr.mAdrDisplayName = pois.get(0).title;
+        }
+        mMapListener.onMapGeo2Address(centerAdr);
+      }
+
+      @Override
+      public void onFailure(int i, String s, Throwable throwable) {
+
+      }
+    });
   }
 
   @Override
@@ -277,8 +361,11 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
     mTencentMap.clear();
   }
 
-
   /************* life cycle begin **************/
+  @Override
+  public void onCreate(Bundle bundle) {
+  }
+
   @Override
   public void onResume() {
     if (mView != null) {

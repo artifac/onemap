@@ -8,7 +8,13 @@ import com.one.map.map.element.Polyline;
 import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
+import com.one.map.view.IMapDelegate.IMapListener;
 import java.util.List;
+
+
+/**
+ * 地图对外提供的操作
+ */
 
 public interface IMap {
 
@@ -28,7 +34,7 @@ public interface IMap {
   /**
    * geo to address
    */
-  Address geo2Address(LatLng latLng);
+  void geo2Address(LatLng latLng);
 
   /**
    * reverse geo
@@ -65,6 +71,10 @@ public interface IMap {
    * logo 位置
    */
   void setLogoPosition(int position, int left, int top, int right, int bottom);
+
+  LatLng getCenterPosition();
+
+  void setMapListener(IMapListener listener);
 
   /**
    * 路径规划返回的消息

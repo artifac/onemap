@@ -25,6 +25,7 @@ import com.one.map.map.element.Polyline;
 import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
+import com.one.map.view.IMapDelegate.IMapListener;
 import com.one.map.view.IMapView;
 import java.util.List;
 
@@ -48,6 +49,12 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     mMapView = MapFactory.newInstance().getMapView(activity, IMapView.TENCENT);
   }
 
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    mMapView.onCreate(savedInstanceState);
+  }
+
   @Nullable
   @Override
   public View onCreateViewImpl(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -56,7 +63,8 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     mMapViewContainer = (FrameLayout) view.findViewById(R.id.map_view_container);
     mLocPin = (ImageView) view.findViewById(R.id.map_fragment_loc_pin);
     mMapView.attachToRootView(mMapViewContainer);
-    int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getActivity().getResources().getDisplayMetrics());
+    int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
+        getActivity().getResources().getDisplayMetrics());
     setLogoPosition(85, margin, margin, margin, margin);
 //    mMapPresenter = new MapPresenter(getContext(), this, mMapPoi);
 //    displayMyLocation();
@@ -72,9 +80,9 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
       BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
       mLocationMarker = mMapView.myLocationConfig(bitmapDescriptor, loc);
 
-      BestViewModel model = new BestViewModel();
-      model.zoomCenter = loc;
-      doBestView(model);
+//      BestViewModel model = new BestViewModel();
+//      model.zoomCenter = loc;
+//      doBestView(model);
 
     }
   }
@@ -84,6 +92,11 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     if (mLocationMarker != null) {
       mLocationMarker.rotate(degree);
     }
+  }
+
+  @Override
+  public void setMapListener(IMapListener listener) {
+    mMapView.setMapListener(listener);
   }
 
   @Override
@@ -121,8 +134,8 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   }
 
   @Override
-  public Address geo2Address(LatLng latLng) {
-    return null;
+  public void geo2Address(LatLng latLng) {
+    mMapView.geo2Address(latLng);
   }
 
   @Override
@@ -186,4 +199,8 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     return LocationProvider.getInstance().getLocation();
   }
 
+  @Override
+  public LatLng getCenterPosition() {
+    return null;
+  }
 }

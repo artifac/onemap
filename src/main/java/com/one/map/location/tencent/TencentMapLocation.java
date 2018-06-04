@@ -138,12 +138,7 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
 
   @Override
   public Address getCurrentLocation() {
-    if (location != null) {
-      return buildAddress(location);
-    } else if (currentLocation != null) {
-      return currentLocation;
-    }
-    return null;
+    return currentLocation;
   }
 
   public void onSaveInstanceState(Bundle outState) {
