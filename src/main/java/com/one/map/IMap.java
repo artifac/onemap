@@ -22,8 +22,6 @@ public interface IMap {
 
   /**
    * 添加一系列 Marker
-   * @param options
-   * @return
    */
   List<Marker> addMarkers(List<MarkerOption> options);
 
@@ -56,6 +54,10 @@ public interface IMap {
    */
   void updateInfoWindowMsg(CharSequence msg);
 
+  void poiSearchByKeyWord(String curCity, CharSequence key, IPoiSearchListener listener);
+
+  void poiNearByWithCity(LatLng latLng, String curCity);
+
   /**
    * remove info window
    */
@@ -63,7 +65,6 @@ public interface IMap {
 
   /**
    * draw line
-   * @param option
    */
   Polyline addPolyline(PolylineOption option);
 
@@ -78,16 +79,24 @@ public interface IMap {
 
   /**
    * 路径规划返回的消息
+   *
    * @return
    */
   interface IRoutePlanMsgCallback {
+
     void routePlanMsg(String msg, List<LatLng> points);
   }
 
   void setRoutePlanCallback(IRoutePlanMsgCallback callback);
 
   interface IMarkerClickCallback {
+
     void onMarkerClick(IMarker marker);
+  }
+
+  interface IPoiSearchListener {
+
+    void onMapSearchAddress(List<Address> address);
   }
 
   void setIMarkerClickCallback(IMarkerClickCallback callback);

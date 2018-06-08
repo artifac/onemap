@@ -1,6 +1,8 @@
 package com.one.map.model;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
   
   /**
    * 地址经纬度
@@ -49,6 +51,8 @@ public class Address {
   public float speed;
 
   public float accuracy;
+
+  public float distance = -1;
   
   @Override
   public String toString() {

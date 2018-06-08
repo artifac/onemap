@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.one.map.IMap;
+import com.one.map.poi.IMapPoi;
 import com.one.map.view.IMapView;
 
 /**
@@ -20,6 +21,7 @@ import com.one.map.view.IMapView;
 public abstract class BaseMapFragment extends Fragment implements IMap {
 
   protected IMapView mMapView;
+  protected IMapPoi mMapPoi;
 
   private SensorManager mSensorManager;
   private SensorListener listener = new SensorListener();

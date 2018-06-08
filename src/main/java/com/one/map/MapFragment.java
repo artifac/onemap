@@ -25,6 +25,7 @@ import com.one.map.map.element.Polyline;
 import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
+import com.one.map.presenter.MapPresenter;
 import com.one.map.view.IMapDelegate.IMapListener;
 import com.one.map.view.IMapView;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
 public class MapFragment extends BaseMapFragment implements IMarkerClickListener {
 
   private FrameLayout mMapViewContainer;
-  //  private MapPresenter mMapPresenter;
+    private MapPresenter mMapPresenter;
   /**
    * 屏幕中心定位点大头针
    */
@@ -47,6 +48,7 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     mMapView = MapFactory.newInstance().getMapView(activity, IMapView.TENCENT);
+    mMapPoi = MapFactory.newInstance().getMapPoi(activity, IMapView.TENCENT);
   }
 
   @Override
@@ -66,7 +68,7 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
     int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
         getActivity().getResources().getDisplayMetrics());
     setLogoPosition(85, margin, margin, margin, margin);
-//    mMapPresenter = new MapPresenter(getContext(), this, mMapPoi);
+    mMapPresenter = new MapPresenter(getContext(), this, mMapPoi);
 //    displayMyLocation();
     return view;
   }
@@ -134,6 +136,16 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   }
 
   @Override
+  public void poiSearchByKeyWord(String curCity, CharSequence key, IPoiSearchListener listener) {
+    mMapView.poiSearchByKeyWord(curCity, key, listener);
+  }
+
+  @Override
+  public void poiNearByWithCity(LatLng latLng, String curCity) {
+    mMapView.poiNearByWithCity(latLng, curCity);
+  }
+
+  @Override
   public void geo2Address(LatLng latLng) {
     mMapView.geo2Address(latLng);
   }
@@ -145,7 +157,7 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
 
   @Override
   public void drivingRoutePlan(Address from, Address to) {
-//    mMapPresenter.drivingRoutePlan(from, to);
+    mMapPresenter.drivingRoutePlan(from, to);
   }
 
   @Override

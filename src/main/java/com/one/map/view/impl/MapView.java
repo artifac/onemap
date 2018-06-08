@@ -3,6 +3,7 @@ package com.one.map.view.impl;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import com.one.map.IMap.IPoiSearchListener;
 import com.one.map.amap.AMapDelegate;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.CircleOption;
@@ -60,6 +61,16 @@ public class MapView implements IMapView {
   @Override
   public void geo2Address(LatLng latLng) {
      mMapDelegate.geo2Address(latLng);
+  }
+
+  @Override
+  public void poiSearchByKeyWord(String curCity, CharSequence key, IPoiSearchListener listener) {
+    mMapDelegate.poiSearchByKeyWord(curCity, key, listener);
+  }
+
+  @Override
+  public void poiNearByWithCity(LatLng latLng, String city) {
+    mMapDelegate.poiNearByWithCity(latLng, city);
   }
 
   @Override

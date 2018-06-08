@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
+import com.one.map.IMap.IPoiSearchListener;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.CircleOption;
 import com.one.map.map.MarkerOption;
@@ -13,6 +14,7 @@ import com.one.map.map.element.Circle;
 import com.one.map.map.element.IMarker;
 import com.one.map.map.element.Marker;
 import com.one.map.map.element.Polyline;
+import com.one.map.model.Address;
 import com.one.map.model.BestViewModel;
 import com.one.map.model.LatLng;
 import com.one.map.model.MapStatusOperation.Padding;
@@ -92,6 +94,15 @@ public class AMapDelegate implements IMapDelegate<AMap> {
 
   @Override
   public void geo2Address(LatLng latLng) {
+
+  }
+
+  @Override
+  public void poiSearchByKeyWord(String curCity, CharSequence key, IPoiSearchListener listener) {
+  }
+
+  @Override
+  public void poiNearByWithCity(LatLng latLng, String city) {
 
   }
 

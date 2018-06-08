@@ -2,6 +2,7 @@ package com.one.map.view;
 
 import android.support.annotation.IntDef;
 import android.view.ViewGroup;
+import com.one.map.IMap.IPoiSearchListener;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.CircleOption;
 import com.one.map.map.MarkerOption;
@@ -93,6 +94,15 @@ public interface IMapView extends IMapLifeCycle {
   void removeInfoWindow();
 
   void geo2Address(LatLng latLng);
+
+  /**
+   * 关键字搜索
+   * @param key
+   * @return
+   */
+  void poiSearchByKeyWord(String curCity, CharSequence key, IPoiSearchListener listener);
+
+  void poiNearByWithCity(LatLng latLng, String city);
   
   /**
    * 刷新最佳view

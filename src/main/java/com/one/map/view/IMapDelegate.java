@@ -2,6 +2,7 @@ package com.one.map.view;
 
 import android.os.Bundle;
 import android.view.View;
+import com.one.map.IMap.IPoiSearchListener;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.CircleOption;
 import com.one.map.map.MarkerOption;
@@ -26,14 +27,6 @@ public interface IMapDelegate<MAP> {
     public LatLng center;
     public String detailAddress;
     public String simpleBuilding;
-
-    @Override
-    public String toString() {
-      return "CenterLatLngParams{" +
-          "center=" + center +
-          ", detailAddress='" + detailAddress + '\'' +
-          '}';
-    }
   }
 
   interface IMapListener {
@@ -54,6 +47,8 @@ public interface IMapDelegate<MAP> {
     void onMapMoveFinish(CenterLatLngParams params);
 
     void onMapGeo2Address(Address address);
+
+    void onMapPoiAddresses(int type, List<Address> addresses);
   }
 
   void setMapListener(IMapListener listener);
@@ -115,9 +110,12 @@ public interface IMapDelegate<MAP> {
    */
   void geo2Address(LatLng latLng);
 
+  void poiNearByWithCity(LatLng latLng, String city);
+
   /**
-   *
+   * 关键字搜索
    */
+  void poiSearchByKeyWord(String curCity, CharSequence key, IPoiSearchListener listener);
 
   /**
    * 绘制路线

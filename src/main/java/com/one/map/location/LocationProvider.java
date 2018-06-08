@@ -82,7 +82,6 @@ public class LocationProvider implements ILocReceive {
 
   @Override
   public void onLocReceive(Address adr) {
-    Logger.e("ldx", "onLocReceiver >> adr " + adr);
     try {
       for (OnLocationChangedListener listener : mListeners) {
         if (listener != null) {

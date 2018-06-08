@@ -1,9 +1,8 @@
 package com.one.map.tencent;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import com.one.map.IMap.IPoiSearchListener;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.BitmapDescriptorConvert;
 import com.one.map.map.CircleOption;
@@ -32,8 +31,13 @@ import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
 import com.tencent.lbssearch.object.Location;
 import com.tencent.lbssearch.object.param.Geo2AddressParam;
+import com.tencent.lbssearch.object.param.SearchParam;
+import com.tencent.lbssearch.object.param.SearchParam.Nearby;
+import com.tencent.lbssearch.object.param.SearchParam.Region;
 import com.tencent.lbssearch.object.result.Geo2AddressResultObject;
 import com.tencent.lbssearch.object.result.Geo2AddressResultObject.ReverseAddressResult.Poi;
+import com.tencent.lbssearch.object.result.SearchResultObject;
+import com.tencent.lbssearch.object.result.SearchResultObject.SearchResultData;
 import com.tencent.tencentmap.mapsdk.maps.CameraUpdate;
 import com.tencent.tencentmap.mapsdk.maps.CameraUpdateFactory;
 import com.tencent.tencentmap.mapsdk.maps.LocationSource;
@@ -101,13 +105,12 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
 
       @Override
       public void onCameraChangeFinished(CameraPosition cameraPosition) {
-        Log.e("ldx", "onCameraChangeFinish >>>>>>>");
-        mCenterLatLngParams.center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+        mCenterLatLngParams.center = new LatLng(cameraPosition.target.latitude,
+            cameraPosition.target.longitude);
         mMapListener.onMapMoveFinish(mCenterLatLngParams);
       }
     });
   }
-
 
   @Override
   public void setMapListener(IMapListener listener) {
@@ -121,8 +124,10 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
 
   @Override
   public void geo2Address(final LatLng ll) {
-    com.tencent.tencentmap.mapsdk.maps.model.LatLng latLng = LatLngConvert.convert2TencentLatLng(ll);
-    Geo2AddressParam geo2AddressParam = new Geo2AddressParam().location(new Location((float) latLng.latitude, (float) latLng.longitude)).get_poi(true);
+    com.tencent.tencentmap.mapsdk.maps.model.LatLng latLng = LatLngConvert
+        .convert2TencentLatLng(ll);
+    Geo2AddressParam geo2AddressParam = new Geo2AddressParam()
+        .location(new Location((float) latLng.latitude, (float) latLng.longitude)).get_poi(true);
     TencentSearch search = new TencentSearch(mContext);
     search.geo2address(geo2AddressParam, new HttpResponseListener() {
       @Override
@@ -149,10 +154,85 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
             return 0;
           }
         });
+        List<Address> poiAdrs = new ArrayList<Address>();
+        for (Poi poi : pois) {
+          Address poiAdr = new Address();
+          poiAdr.mAdrLatLng = new LatLng(poi.location.lat, poi.location.lng);
+          poiAdr.mAdrDisplayName = poi.title;
+          poiAdr.mAdrFullName = poi.address;
+          poiAdr.distance = poi._distance;
+          poiAdrs.add(poiAdr);
+        }
         if (pois != null && pois.size() > 0) {
           centerAdr.mAdrDisplayName = pois.get(0).title;
         }
         mMapListener.onMapGeo2Address(centerAdr);
+        mMapListener.onMapPoiAddresses(0, poiAdrs);
+      }
+
+      @Override
+      public void onFailure(int i, String s, Throwable throwable) {
+
+      }
+    });
+  }
+
+  @Override
+  public void poiNearByWithCity(LatLng latLng, final String city) {
+    Region region = new Region().poi(city);
+    Nearby nearby = new Nearby()
+        .point(new Location((float) latLng.latitude, (float) latLng.longitude)).r(20000);
+    SearchParam param = new SearchParam().region(region).keyword("基础设施")
+        .boundary(nearby).orderby(true).page_index(1).page_size(15);
+    TencentSearch search = new TencentSearch(mContext);
+    search.search(param, new HttpResponseListener() {
+      @Override
+      public void onSuccess(int i, BaseObject baseObject) {
+        SearchResultObject result = (SearchResultObject) baseObject;
+        if (result != null) {
+          List<Address> searchAddress = new ArrayList<Address>();
+          List<SearchResultData> searchResultDataList = result.data;
+          for (SearchResultData data : searchResultDataList) {
+            Address address = new Address();
+            address.mAdrFullName = data.address;
+            address.mAdrDisplayName = data.title;
+            address.mAdrLatLng = new LatLng(data.location.lat, data.location.lng);
+            searchAddress.add(address);
+          }
+          mMapListener.onMapPoiAddresses(1, searchAddress);
+        }
+      }
+
+      @Override
+      public void onFailure(int i, String s, Throwable throwable) {
+      }
+    });
+  }
+
+  @Override
+  public void poiSearchByKeyWord(String city, CharSequence key, final IPoiSearchListener listener) {
+    final Region region = new Region().poi(city);
+    SearchParam param = new SearchParam().keyword(key.toString()).orderby(true).boundary(region);
+    TencentSearch search = new TencentSearch(mContext);
+    search.search(param, new HttpResponseListener() {
+      @Override
+      public void onSuccess(int i, BaseObject baseObject) {
+        SearchResultObject result = (SearchResultObject) baseObject;
+        if (result != null) {
+          List<Address> searchAddress = new ArrayList<Address>();
+          List<SearchResultData> searchDatas = result.data;
+          for (SearchResultData data : searchDatas) {
+            Address address = new Address();
+            address.mAdrFullName = data.address;
+            address.mAdrDisplayName = data.title;
+            address.mAdrLatLng = new LatLng(data.location.lat, data.location.lng);
+            searchAddress.add(address);
+          }
+
+          if (listener != null) {
+            listener.onMapSearchAddress(searchAddress);
+          }
+        }
       }
 
       @Override
@@ -338,7 +418,8 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
       LatLngBounds symmetryBounds = new LatLngBounds(southwest, northeast);
 
       cameraUpdate = CameraUpdateFactory
-          .newLatLngBoundsRect(symmetryBounds, model.padding.left + padding.left, model.padding.right + padding.right,
+          .newLatLngBoundsRect(symmetryBounds, model.padding.left + padding.left,
+              model.padding.right + padding.right,
               model.padding.top + padding.top, model.padding.bottom + padding.bottom);
     } else {
       /** 以一组点几何中心为中心点, 同时确保所有点都在地图可视区域*/
@@ -350,7 +431,8 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
       }
       LatLngBounds bounds = builder.build();
       cameraUpdate = CameraUpdateFactory
-          .newLatLngBoundsRect(bounds, model.padding.left + padding.left, model.padding.right + padding.right,
+          .newLatLngBoundsRect(bounds, model.padding.left + padding.left,
+              model.padding.right + padding.right,
               model.padding.top + padding.top, model.padding.bottom + padding.bottom);
     }
     mTencentMap.animateCamera(cameraUpdate);
