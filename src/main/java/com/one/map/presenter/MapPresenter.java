@@ -57,6 +57,9 @@ public class MapPresenter {
               polyline.remove();
             }
             polyline = drawlines(latLngs);
+            if (mCallback != null) {
+              mCallback.routePlanPoints(latLngs);
+            }
           }
         } else if (obj instanceof String) {
           String failMsg = (String) obj;
@@ -103,6 +106,13 @@ public class MapPresenter {
 
   public void setRoutePlanCallback(IMap.IRoutePlanMsgCallback callback) {
     mCallback = callback;
+  }
+
+  public List<LatLng> getLinePoints() {
+    if (polyline != null) {
+      return polyline.getPoints();
+    }
+    return null;
   }
 
 }

@@ -44,6 +44,8 @@ public interface IMap {
    */
   void drivingRoutePlan(Address from, Address to);
 
+  List<LatLng> getLinePoints();
+
   /**
    * show info window
    */
@@ -83,6 +85,8 @@ public interface IMap {
    * @return
    */
   interface IRoutePlanMsgCallback {
+
+    void routePlanPoints(List<LatLng> points);
 
     void routePlanMsg(String msg, List<LatLng> points);
   }

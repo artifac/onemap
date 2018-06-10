@@ -161,6 +161,11 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   }
 
   @Override
+  public List<LatLng> getLinePoints() {
+    return mMapPresenter.getLinePoints();
+  }
+
+  @Override
   public Polyline addPolyline(PolylineOption option) {
     return mMapView.addPolyline(option);
   }
@@ -204,7 +209,7 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
 
   @Override
   public void setRoutePlanCallback(IRoutePlanMsgCallback callback) {
-//    mMapPresenter.setRoutePlanCallback(callback);
+    mMapPresenter.setRoutePlanCallback(callback);
   }
 
   private Address getCurrentLocation() {
