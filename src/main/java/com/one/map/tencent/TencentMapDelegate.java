@@ -1,8 +1,11 @@
 package com.one.map.tencent;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import com.one.map.IMap.IPoiSearchListener;
+import com.one.map.location.LocationProvider;
+import com.one.map.log.Logger;
 import com.one.map.map.BitmapDescriptor;
 import com.one.map.map.BitmapDescriptorConvert;
 import com.one.map.map.CircleOption;
@@ -75,6 +78,8 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
   private Marker mMyMarker;
   private IMapListener mMapListener;
 
+  private TencentMapRipple mapRipple;
+
   private CenterLatLngParams mCenterLatLngParams = new CenterLatLngParams();
 
   public TencentMapDelegate(Context context) {
@@ -110,6 +115,8 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
         mMapListener.onMapMoveFinish(mCenterLatLngParams);
       }
     });
+
+
   }
 
   @Override
@@ -210,7 +217,7 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
   }
 
   @Override
-  public void poiSearchByKeyWord(String city, CharSequence key, final IPoiSearchListener listener) {
+  public void poiSearchByKeyWord(final String city, CharSequence key, final IPoiSearchListener listener) {
     final Region region = new Region().poi(city);
     SearchParam param = new SearchParam().keyword(key.toString()).orderby(true).boundary(region);
     TencentSearch search = new TencentSearch(mContext);
@@ -226,6 +233,9 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
             address.mAdrFullName = data.address;
             address.mAdrDisplayName = data.title;
             address.mAdrLatLng = new LatLng(data.location.lat, data.location.lng);
+            address.mCity = city;
+            address.mCityCode = LocationProvider.getInstance().getCityCode();
+            address.type = 6;
             searchAddress.add(address);
           }
 
@@ -297,6 +307,7 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
     final TencentMarker tencentMarker = new TencentMarker(marker);
     tencentMarker.setMarkerType(option.markerType);
     tencentMarker.setClick(option.isClickable);
+    tencentMarker.rotate(option.rotate);
     mTencentMap.setOnMarkerClickListener(option.getMarkerClickListenerAdapter());
     return new com.one.map.map.element.Marker(tencentMarker);
   }
@@ -308,13 +319,7 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
   public List<com.one.map.map.element.Marker> addMarkers(List<MarkerOption> options) {
     List<com.one.map.map.element.Marker> markers = new ArrayList<>();
     for (MarkerOption option : options) {
-      MarkerOptions markerOptions = MarkerOptionConvert.convert2TencentMarkerOption(option);
-      Marker marker = mTencentMap.addMarker(markerOptions);
-      final TencentMarker tencentMarker = new TencentMarker(marker);
-      tencentMarker.setMarkerType(option.markerType);
-      tencentMarker.setClick(option.isClickable);
-      mTencentMap.setOnMarkerClickListener(option.getMarkerClickListenerAdapter());
-      markers.add(new com.one.map.map.element.Marker(tencentMarker));
+     addMarker(option);
     }
     return markers;
   }
@@ -375,8 +380,7 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
 
   private void moveTo(LatLng latLng, float zoom) {
     if (latLng != null) {
-      com.tencent.tencentmap.mapsdk.maps.model.LatLng center = LatLngConvert
-          .convert2TencentLatLng(latLng);
+      com.tencent.tencentmap.mapsdk.maps.model.LatLng center = LatLngConvert.convert2TencentLatLng(latLng);
       CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, zoom);
       mTencentMap.animateCamera(cameraUpdate);
     }
@@ -425,9 +429,12 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
       /** 以一组点几何中心为中心点, 同时确保所有点都在地图可视区域*/
       LatLngBounds.Builder builder = new LatLngBounds.Builder();
       for (int i = 0; i < model.bounds.size(); i++) {
-        builder.include(
-            new com.tencent.tencentmap.mapsdk.maps.model.LatLng(model.bounds.get(i).latitude,
-                model.bounds.get(i).longitude));
+        LatLng latLng = model.bounds.get(i);
+        if (latLng != null) {
+          builder.include(
+              new com.tencent.tencentmap.mapsdk.maps.model.LatLng(latLng.latitude,
+                  latLng.longitude));
+        }
       }
       LatLngBounds bounds = builder.build();
       cameraUpdate = CameraUpdateFactory
@@ -436,6 +443,31 @@ public class TencentMapDelegate implements IMapDelegate<TencentMap> {
               model.padding.top + padding.top, model.padding.bottom + padding.bottom);
     }
     mTencentMap.animateCamera(cameraUpdate);
+  }
+
+  @Override
+  public void startRadarAnim(LatLng latLng) {
+    if (mapRipple == null) {
+      mapRipple = new TencentMapRipple(mTencentMap, latLng, mContext)
+          .withNumberOfRipples(4)
+          .withFillColor(Color.parseColor("#58A3D2E4"))
+          .withStrokeColor(Color.parseColor("#7CA3D2E4"))
+          .withStrokeWidth(.5f)      // 10dp
+          .withDurationBetweenTwoRipples(1000)
+          .withDistance(80)      // 1000 metres radius
+          .withRippleDuration(5000)    //5000ms
+          .withTransparency(0.5f);
+    }
+
+    mapRipple.startRippleMapAnimation();
+  }
+
+  @Override
+  public void stopRadarAnim() {
+    if (mapRipple != null && mapRipple.isAnimationRunning()) {
+      mapRipple.stopRippleMapAnimation();
+      mapRipple = null;
+    }
   }
 
   @Override

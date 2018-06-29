@@ -1,6 +1,7 @@
 package com.one.map.map;
 
 import com.one.map.model.LatLng;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PolylineOption {
@@ -27,6 +28,11 @@ public class PolylineOption {
    * 折线顶点集
    */
   List<LatLng> mPoints;
+
+  List<Integer> mColors = new ArrayList<>();
+  List<Integer> mColorIndex = new ArrayList<>();
+
+  boolean mArrow;
   
   /**
    * 设置折形坐标点列表
@@ -61,6 +67,24 @@ public class PolylineOption {
     this.mColor = color;
     return this;
   }
+
+  public PolylineOption colors(List<Integer> colors) {
+    mColors.addAll(colors);
+    return this;
+  }
+
+  public PolylineOption colorIndex(List<Integer> index) {
+    mColorIndex.addAll(index);
+    return this;
+  }
+
+  public int[] integerToInt(List<Integer> integers) {
+    int[] ints = new int[integers.size()];
+    for (int i = 0 ;i < integers.size(); i++) {
+      ints[i] = integers.get(i);
+    }
+    return ints;
+  }
   
   /**
    * 设置折线宽度
@@ -70,6 +94,11 @@ public class PolylineOption {
    */
   public PolylineOption width(int width) {
     this.mWidth = width;
+    return this;
+  }
+
+  public PolylineOption arrow(boolean arrow) {
+    mArrow = arrow;
     return this;
   }
 

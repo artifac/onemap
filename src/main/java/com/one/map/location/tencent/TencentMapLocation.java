@@ -3,6 +3,7 @@ package com.one.map.location.tencent;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Keep;
+import android.util.Log;
 import com.one.map.location.ILocation;
 import com.one.map.location.Location;
 import com.one.map.model.Address;
@@ -27,6 +28,8 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
 
   private Location location;
 
+  private static final long INTERVAL = 10 * 1000;
+
   public TencentMapLocation(Context context) {
     mContext = context;
     mManager = TencentLocationManager.getInstance(mContext);
@@ -34,11 +37,14 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
     locationRequest = TencentLocationRequest.create();
     locationRequest.setAllowGPS(true);
     locationRequest.setAllowDirection(true);
+    locationRequest.setAllowCache(false);
+    locationRequest.setAllowDirection(true);
+    locationRequest.setInterval(INTERVAL);
+    locationRequest.setRequestLevel(TencentLocationRequest.REQUEST_LEVEL_ADMIN_AREA);
   }
 
   @Override
   public int onStart() {
-    locationRequest.setRequestLevel(TencentLocationRequest.REQUEST_LEVEL_ADMIN_AREA);
 //    0	注册位置监听器成功
 //    1	设备缺少使用腾讯定位SDK需要的基本条件
 //    2	配置的 Key 不正确
@@ -89,6 +95,8 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
     if (location == null) {
       return null;
     }
+//    location.latitude = location.latitude - 0.00060;
+//    location.longitude = location.longitude - 0.00060;
     Address locAdr = new Address();
     locAdr.mCity = location.city;
     locAdr.bearing = location.bearing;
@@ -109,6 +117,7 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
     if (tencentLocation == null) {
       return null;
     }
+    Log.e("ldx", "tencentLocation " + tencentLocation);
     Location location = new Location();
     location.city = tencentLocation.getCity();
     location.accuracy = tencentLocation.getAccuracy();
@@ -118,11 +127,19 @@ public class TencentMapLocation implements ILocation, TencentLocationListener {
     location.country = tencentLocation.getNation();
     location.streetCode = tencentLocation.getStreetNo();
     location.street = tencentLocation.getStreet();
-    location.latitude = tencentLocation.getLatitude();
-    location.longitude = tencentLocation.getLongitude();
-    location.adrFullName = tencentLocation.getAddress();
+    location.latitude = tencentLocation.getLatitude() - accuracyM();
+    location.longitude = tencentLocation.getLongitude() - accuracyM();
+    location.adrFullName = tencentLocation.getAddress(); // 位置详细信息
     location.adrDisplayName = tencentLocation.getName();
     return location;
+  }
+
+  /**
+   * 定位有偏差 直线距离减算一下
+   * @return
+   */
+  private double accuracyM() {
+    return 6.0E-4;
   }
 
 

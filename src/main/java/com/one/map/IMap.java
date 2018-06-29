@@ -25,7 +25,7 @@ public interface IMap {
    */
   List<Marker> addMarkers(List<MarkerOption> options);
 
-  void displayMyLocation();
+  void showMyLocation();
 
   void hideMyLocation();
 
@@ -43,6 +43,10 @@ public interface IMap {
    * 路线规划
    */
   void drivingRoutePlan(Address from, Address to);
+
+  void drivingRoutePlan(Address from, Address to, boolean arrow);
+
+  void drivingRoutePlan(Address from, Address to, int lineColor, boolean arrow);
 
   List<LatLng> getLinePoints();
 
@@ -91,7 +95,9 @@ public interface IMap {
     void routePlanMsg(String msg, List<LatLng> points);
   }
 
-  void setRoutePlanCallback(IRoutePlanMsgCallback callback);
+  void registerPlanCallback(IRoutePlanMsgCallback callback);
+
+  void unRegisterPlanCallback(IRoutePlanMsgCallback callback);
 
   interface IMarkerClickCallback {
 
@@ -105,6 +111,8 @@ public interface IMap {
 
   void setIMarkerClickCallback(IMarkerClickCallback callback);
 
+  void removeDriverLine();
+
   /**
    * 清空所有地图元素
    */
@@ -117,4 +125,8 @@ public interface IMap {
    * 2.框元素 通过设置bounds
    */
   void doBestView(BestViewModel model);
+
+  void startRadarAnim(LatLng latLng);
+
+  void stopRadarAnim();
 }

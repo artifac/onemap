@@ -1,7 +1,10 @@
 package com.one.map.map;
 
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.model.Marker;
 import com.one.map.map.element.IMarker;
 import com.one.map.map.element.IMarker.MarkerType;
+import com.one.map.map.element.amap.AMapMarker;
 import com.one.map.map.element.tencent.TencentMarker;
 import com.one.map.model.LatLng;
 import com.tencent.tencentmap.mapsdk.maps.TencentMap;
@@ -29,6 +32,8 @@ public class MarkerOption {
 
   public boolean isClickable = true;
 
+  public float rotate;
+
   @MarkerType
   public int markerType;
 
@@ -44,7 +49,7 @@ public class MarkerOption {
     return markerClickListener;
   }
 
-  private class MarkerClickListenerAdapter implements TencentMap.OnMarkerClickListener {
+  private class MarkerClickListenerAdapter implements TencentMap.OnMarkerClickListener, AMap.OnMarkerClickListener {
 
     @Override
     public boolean onMarkerClick(com.tencent.tencentmap.mapsdk.maps.model.Marker marker) {
@@ -52,6 +57,15 @@ public class MarkerOption {
       if (mListener != null && isClickable) {
         mListener.onMarkerClick(tencentMarker);
         return true;
+      }
+      return false;
+    }
+
+    @Override
+    public boolean onMarkerClick(com.amap.api.maps.model.Marker marker) {
+      AMapMarker aMapMarker = new AMapMarker(marker);
+      if (mListener != null && isClickable) {
+        mListener.onMarkerClick(aMapMarker);
       }
       return false;
     }

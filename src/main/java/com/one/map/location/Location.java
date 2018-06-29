@@ -20,9 +20,10 @@ public class Location implements Parcelable {
   public String serverBackTime;
   public String adrFullName;
   public String adrDisplayName;
+  public String locationDetail;
   public float bearing;
   public float speed;
-  public float accuracy;
+  public float accuracy;  // 精度
 
 
   public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -98,6 +99,7 @@ public class Location implements Parcelable {
         ", adrDisplayName='" + adrDisplayName + '\'' +
         ", bearing=" + bearing +
         ", speed=" + speed +
+        ", accuracy=" + accuracy +
         '}';
   }
 }

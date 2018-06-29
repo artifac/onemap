@@ -84,6 +84,10 @@ public class Marker {
   public ArrayList getIcons() {
     return null;
   }
+
+  public void rotate(float rotate) {
+    iMarker.rotate(rotate);
+  }
   
   public void setAnimation(Animation animation) {
     iMarker.setAnimation(animation);

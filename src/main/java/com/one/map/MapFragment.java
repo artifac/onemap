@@ -36,11 +36,7 @@ import java.util.List;
 public class MapFragment extends BaseMapFragment implements IMarkerClickListener {
 
   private FrameLayout mMapViewContainer;
-    private MapPresenter mMapPresenter;
-  /**
-   * 屏幕中心定位点大头针
-   */
-  private ImageView mLocPin;
+  private MapPresenter mMapPresenter;
   private IMarker mLocationMarker;
   private IMarkerClickCallback mMarkerListener;
 
@@ -48,7 +44,10 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     mMapView = MapFactory.newInstance().getMapView(activity, IMapView.TENCENT);
-    mMapPoi = MapFactory.newInstance().getMapPoi(activity, IMapView.TENCENT);
+//    mMapPoi = MapFactory.newInstance().getMapPoi(activity, IMapView.TENCENT);
+
+//    mMapView = MapFactory.newInstance().getMapView(activity, IMapView.AMAP);
+    mMapPoi = MapFactory.newInstance().getMapPoi(activity, IMapView.AMAP);
   }
 
   @Override
@@ -63,29 +62,36 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
       @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.map_fragment_layout, container);
     mMapViewContainer = (FrameLayout) view.findViewById(R.id.map_view_container);
-    mLocPin = (ImageView) view.findViewById(R.id.map_fragment_loc_pin);
     mMapView.attachToRootView(mMapViewContainer);
     int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
         getActivity().getResources().getDisplayMetrics());
     setLogoPosition(85, margin, margin, margin, margin);
     mMapPresenter = new MapPresenter(getContext(), this, mMapPoi);
-//    displayMyLocation();
+    mMapView.setUIController(false);
     return view;
   }
 
-  private void showMyLocation() {
-    Address location = getCurrentLocation();
-    if (location != null) {
-      LatLng loc = location.mAdrLatLng;
-      Bitmap bitmap = BitmapFactory
-          .decodeResource(getResources(), R.drawable.common_map_my_location);
-      BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-      mLocationMarker = mMapView.myLocationConfig(bitmapDescriptor, loc);
+  @Override
+  public void showMyLocation() {
+    int type = mMapView.getMapType();
+    if (type == IMapView.TENCENT) {
+      Address location = getCurrentLocation();
+      if (location != null && mLocationMarker == null) {
+        LatLng loc = location.mAdrLatLng;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.common_map_my_location);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+        mLocationMarker = mMapView.myLocationConfig(bitmapDescriptor, loc);
+      }
+    }
+    mMapView.setMyLocationEnable(true);
+  }
 
-//      BestViewModel model = new BestViewModel();
-//      model.zoomCenter = loc;
-//      doBestView(model);
-
+  @Override
+  public void hideMyLocation() {
+    mMapView.setMyLocationEnable(false);
+    if (mLocationMarker != null) {
+      mLocationMarker.remove();
+      mLocationMarker = null;
     }
   }
 
@@ -157,7 +163,17 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
 
   @Override
   public void drivingRoutePlan(Address from, Address to) {
-    mMapPresenter.drivingRoutePlan(from, to);
+    drivingRoutePlan(from, to, false);
+  }
+
+  @Override
+  public void drivingRoutePlan(Address from, Address to, boolean arrow) {
+    mMapPresenter.drivingRoutePlan(from, to, arrow);
+  }
+
+  @Override
+  public void drivingRoutePlan(Address from, Address to, int lineColor, boolean arrow) {
+    mMapPresenter.drivingRoutePlan(from, to, lineColor, arrow);
   }
 
   @Override
@@ -176,19 +192,11 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   }
 
   @Override
-  public void displayMyLocation() {
-    showMyLocation();
-    mMapView.setMyLocationEnable(true);
-  }
-
-  @Override
-  public void hideMyLocation() {
-    mLocationMarker.remove();
-    mMapView.setMyLocationEnable(false);
-  }
-
-  @Override
   public void clearElements() {
+    if (mLocationMarker != null) {
+      mLocationMarker.remove();
+      mLocationMarker = null;
+    }
     mMapView.clearElements();
   }
 
@@ -208,8 +216,13 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   }
 
   @Override
-  public void setRoutePlanCallback(IRoutePlanMsgCallback callback) {
-    mMapPresenter.setRoutePlanCallback(callback);
+  public void registerPlanCallback(IRoutePlanMsgCallback callback) {
+    mMapPresenter.registerRoutePlanCallback(callback);
+  }
+
+  @Override
+  public void unRegisterPlanCallback(IRoutePlanMsgCallback callback) {
+    mMapPresenter.unRegisterRoutePlanCallback(callback);
   }
 
   private Address getCurrentLocation() {
@@ -219,5 +232,20 @@ public class MapFragment extends BaseMapFragment implements IMarkerClickListener
   @Override
   public LatLng getCenterPosition() {
     return null;
+  }
+
+  @Override
+  public void removeDriverLine() {
+    mMapPresenter.removeDriverLine();
+  }
+
+  @Override
+  public void startRadarAnim(LatLng latLng) {
+    mMapView.startRadarAnim(latLng);
+  }
+
+  @Override
+  public void stopRadarAnim() {
+    mMapView.stopRadarAnim();
   }
 }

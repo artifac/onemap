@@ -124,6 +124,10 @@ public interface IMapDelegate<MAP> {
   Polyline addPolyline(PolylineOption option);
   
   Circle addCircle(CircleOption option);
+
+  void startRadarAnim(LatLng latLng);
+
+  void stopRadarAnim();
   
   /**
    * 刷新最佳view

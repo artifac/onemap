@@ -26,11 +26,13 @@ import java.util.List;
 public class MapView implements IMapView {
 
   private IMapDelegate mMapDelegate;
+  private @MapType int mMapType;
 
   /**
    * @param context getApplicationContext()
    */
   public MapView(Context context, @MapType int type) {
+    mMapType = type;
     if (type == TENCENT) {
       mMapDelegate = new TencentMapDelegate(context);
     } else if (type == AMAP) {
@@ -59,6 +61,11 @@ public class MapView implements IMapView {
   }
 
   @Override
+  public int getMapType() {
+    return mMapType;
+  }
+
+  @Override
   public void geo2Address(LatLng latLng) {
      mMapDelegate.geo2Address(latLng);
   }
@@ -76,6 +83,16 @@ public class MapView implements IMapView {
   @Override
   public LatLng getCenterPosition() {
     return mMapDelegate.getCenterPosition();
+  }
+
+  @Override
+  public void startRadarAnim(LatLng latLng) {
+    mMapDelegate.startRadarAnim(latLng);
+  }
+
+  @Override
+  public void stopRadarAnim() {
+    mMapDelegate.stopRadarAnim();
   }
 
   @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Keep;
 import com.one.map.location.ILocation.ILocReceive;
+import com.one.map.location.amap.AMapLocation;
 import com.one.map.location.tencent.TencentMapLocation;
 import com.one.map.log.Logger;
 import com.one.map.model.Address;
@@ -45,6 +46,11 @@ public class LocationProvider implements ILocReceive {
     switch (type) {
       case IMapView.TENCENT: {
         locationService = new TencentMapLocation(context);
+        break;
+      }
+      case IMapView.AMAP: {
+        locationService = new AMapLocation(context);
+        break;
       }
     }
     if (locationService != null) {

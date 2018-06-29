@@ -50,9 +50,14 @@ public class Address implements Serializable {
 
   public float speed;
 
-  public float accuracy;
+  public float accuracy; // 精度 通常精度为, GPS：<20米，WiFi：30-180米，基站：150-800米.
 
   public float distance = -1;
+
+  /**
+   * 1 起点 2 终点 3 搜索历史 4 home 5 company 6 搜索
+   */
+  public int type = -1;
   
   @Override
   public String toString() {
@@ -70,6 +75,7 @@ public class Address implements Serializable {
         ", mAdrDisplayName='" + mAdrDisplayName + '\'' +
         ", bearing=" + bearing +
         ", speed=" + speed +
+        ", accuracy=" + accuracy +
         '}';
   }
 }

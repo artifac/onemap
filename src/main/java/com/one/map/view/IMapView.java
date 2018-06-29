@@ -32,13 +32,14 @@ public interface IMapView extends IMapLifeCycle {
   int TENCENT = 0x002;
   int AMAP = 0x003;
   
-  @Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.PARAMETER})
+  @Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.PARAMETER, ElementType.METHOD})
   @Retention(RetentionPolicy.SOURCE)
   @IntDef({BAIDU, TENCENT, AMAP})
   @interface MapType{
   
   }
-  
+
+  @MapType int getMapType();
   /**
    * 将MapView attach to root view
    * @param viewGroup
@@ -115,4 +116,7 @@ public interface IMapView extends IMapLifeCycle {
    * @return
    */
   LatLng getCenterPosition();
+
+  void startRadarAnim(LatLng latLng);
+  void stopRadarAnim();
 }

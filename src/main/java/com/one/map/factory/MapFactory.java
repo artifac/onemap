@@ -2,8 +2,10 @@ package com.one.map.factory;
 
 import android.content.Context;
 import com.one.map.location.ILocation;
+import com.one.map.location.amap.AMapLocation;
 import com.one.map.location.tencent.TencentMapLocation;
 import com.one.map.poi.IMapPoi;
+import com.one.map.poi.impl.AMapPoi;
 import com.one.map.poi.impl.TencentMapPoi;
 import com.one.map.view.IMapView;
 import com.one.map.view.IMapView.MapType;
@@ -31,6 +33,8 @@ public class MapFactory {
       // convert baidu poi
     } else if (type == IMapView.TENCENT) {
       return new TencentMapPoi(context.getApplicationContext());
+    } else if (type == IMapView.AMAP) {
+      return new AMapPoi(context.getApplicationContext());
     }
     return null;
   }
@@ -40,6 +44,8 @@ public class MapFactory {
     
     } else if (type == IMapView.TENCENT) {
       return new TencentMapLocation(context.getApplicationContext());
+    } else if (type == IMapView.AMAP) {
+      return new AMapLocation(context.getApplicationContext());
     }
     return null;
   }

@@ -1,3 +1,8 @@
 <resources>
   <string name="app_name">OneMap</string>
+
+  <string name="map_time_about">预计</string>
+  <string name="map_kilmeter">公里</string>
+  <string name="map_hour">小时</string>
+  <string name="map_minute">分钟</string>
 </resources>
