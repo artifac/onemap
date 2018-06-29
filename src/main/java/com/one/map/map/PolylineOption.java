@@ -13,7 +13,7 @@ public class PolylineOption {
   /**
    * 折线颜色
    */
-  int mColor = 0xFF000000;
+  int mColor = 0;
 
   /**
    * 描边颜色

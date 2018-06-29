@@ -18,6 +18,8 @@ public class MarkerOptionConvert {
     } else {
       bitmapDescriptor = com.tencent.tencentmap.mapsdk.maps.model.BitmapDescriptorFactory.fromBitmap(option.descriptor.getBitmap());
     }
+    markerOptions.anchor(0.5f, 1f);
+    markerOptions.flat(true);
     return markerOptions.icon(bitmapDescriptor).title(option.title).draggable(false);
   }
 

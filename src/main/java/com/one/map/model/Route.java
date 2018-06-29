@@ -50,16 +50,6 @@ public class Route {
     public Line mLine;
     public List<Integer> indexColor = new ArrayList<>();
     public List<Integer> indexLatLng = new ArrayList<>();
-
-    @Override
-    public String toString() {
-      return "TMC{" +
-          "tmcPoints=" + tmcPoints +
-          ", trafficStatus='" + trafficStatus + '\'' +
-          ", distance=" + distance +
-          ", mLine=" + mLine +
-          '}';
-    }
   }
 
   public enum Line {
@@ -68,7 +58,7 @@ public class Route {
     SLOW("缓行", 1, Color.parseColor("#edc563")),
     JAM("拥堵", 2, Color.parseColor("#db6c64")),
     CONGESTION("严重拥堵", 3, Color.parseColor("#990033")),
-    OTHER("其他", 4, Color.parseColor("#87b2f0"));
+    OTHER("其他", 4, Color.parseColor("#6ac08b"));
 
     String trafficStatus;
     int trafficCode;
@@ -82,6 +72,10 @@ public class Route {
 
     public int getLineColor() {
       return lineColor;
+    }
+
+    public String getLineStatus() {
+      return trafficStatus;
     }
   }
 }

@@ -18,8 +18,9 @@ public class PolylineOptionConvert {
     options.arrow(option.mArrow);
     if (option.mColor != 0) {
       options.color(option.mColor);
-    } else if (!option.mColors.isEmpty()) {
-      Logger.e("ldx", "colors >>>> " + option.mColors.size() + " " + option.mColorIndex.size());
+    }
+    if (!option.mColors.isEmpty()) {
+      Logger.e("ldx", "colors " + option.mColors.size() + " " + option.mColorIndex.size());
       options.colors(option.integerToInt(option.mColors), option.integerToInt(option.mColorIndex));
     }
     options.setLineType(LineType.LINE_TYPE_MULTICOLORLINE);

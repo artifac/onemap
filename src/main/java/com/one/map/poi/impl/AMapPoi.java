@@ -13,7 +13,6 @@ import com.amap.api.services.route.RouteSearch.FromAndTo;
 import com.amap.api.services.route.RouteSearch.OnRouteSearchListener;
 import com.amap.api.services.route.TMC;
 import com.amap.api.services.route.WalkRouteResult;
-import com.one.map.map.LatLngConvert;
 import com.one.map.model.Address;
 import com.one.map.model.LatLng;
 import com.one.map.model.Route;
@@ -52,6 +51,7 @@ public class AMapPoi implements IMapPoi {
             float distance = 0f;
             String direction = "";
             List<LatLng> polyline = new ArrayList<>();
+            List<LatLng> tmcPolyline = new ArrayList<>();
             List<DriveStep> stepList = drivePath.getSteps();
             for (DriveStep step: stepList) {
               duration += step.getDuration();
@@ -82,10 +82,12 @@ public class AMapPoi implements IMapPoi {
                   LatLonPoint point = tmc.getPolyline().get(j);
                   LatLng pointLatLng = new LatLng(point.getLatitude(), point.getLongitude());
                   rTmc.tmcPoints.add(pointLatLng);
+                  tmcPolyline.add(pointLatLng);
+
                   route.tmc.add(rTmc);
                   if (j == 0) {
                     rTmc.indexColor.add(rTmc.mLine.getLineColor());
-                    rTmc.indexLatLng.add(rTmc.tmcPoints.indexOf(pointLatLng));
+                    rTmc.indexLatLng.add(tmcPolyline.indexOf(pointLatLng));
                   }
                 }
               }
